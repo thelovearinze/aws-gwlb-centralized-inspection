@@ -29,18 +29,23 @@ During the implementation of this architecture, several advanced networking chal
 
 ### 1. Asymmetric Routing & Traffic Drops
 **Problem:** Initial SSH connections to the application server failed. The request packets reached the server, but the return traffic was routed into the inspection appliance, which dropped the packets due to a lack of state/context.
+
 **Solution:** Implemented Split Routing in the Spoke VPC Route Table.
+
 - Management traffic (0.0.0.0/0) is routed directly to the Internet Gateway.
 - Test traffic (8.8.8.8/32) is routed specifically to the GWLB Endpoint.
 This ensures management connectivity remains robust while proving the inspection capability.
 
 ### 2. GWLB Target Health Failures
 **Problem:** The Target Group consistently reported the inspection appliance as "Unhealthy," preventing traffic flow.
+
 **Root Cause:** The Terraform configuration defined the Load Balancer and Target Group but was missing the Listener resource. Without a listener, the GWLB could not forward health checks or traffic.
+
 **Solution:** Added an `aws_lb_listener` resource in Terraform to explicitly bridge the GWLB to the Target Group using the GENEVE protocol.
 
 ### 3. GENEVE Encapsulation Verification
 **Problem:** Confirming that traffic was actually passing through the GWLB rather than bypassing it.
+
 **Verification:** Used `tcpdump` on the inspection appliance to capture UDP port 6081. Successfully captured packets showing the outer GENEVE headers wrapping the inner ICMP (ping) packets, validating the architecture works as designed.
 
 ## Deployment Instructions
@@ -52,7 +57,7 @@ This ensures management connectivity remains robust while proving the inspection
 
 ### Steps
 1. **Clone the Repository:**
-   `git clone [repository-url]`
+   `git clone https://github.com/thelovearinze/aws-gwlb-centralized-inspection.git`
    
 2. **Initialize Terraform:**
    `terraform init`
@@ -68,3 +73,7 @@ This ensures management connectivity remains robust while proving the inspection
 
 5. **Cleanup:**
    Run `terraform destroy` to remove all resources and stop billing.
+
+## Related Documentation
+For a deep dive into the architectural decisions, routing logic, and "War Stories" from this implementation, read the full case study on Medium:
+[**Building a Centralized Traffic Inspection Hub on AWS**]https://medium.com/@thelovearinze/f6ed4ee3b56d
