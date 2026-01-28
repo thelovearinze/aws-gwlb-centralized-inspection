@@ -1,0 +1,13 @@
+# Local .terraform directories (The heavy binaries!)
+**/.terraform/*
+
+# .tfstate files (Sensitive state data)
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.log
+
+# Private Keys (Just in case)
+fresh-key
+fresh-key.pub
