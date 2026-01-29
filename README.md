@@ -76,4 +76,4 @@ This ensures management connectivity remains robust while proving the inspection
 
 ## Related Documentation
 For a deep dive into the architectural decisions, routing logic, and "Stories" from this implementation, read the full case study on Medium:
-[**Building a Centralized Traffic Inspection Hub on AWS**]https://medium.com/@thelovearinze/f6ed4ee3b56d
+[**Building a Centralized Traffic Inspection Hub on AWS**] https://medium.com/@thelovearinze/f6ed4ee3b56d
